@@ -29,8 +29,13 @@ func Lex(reader io.Reader) ([][]Token, error) {
         line = strings.SplitN(line, ";", 2)[0]
 
         lineTokens := lexLine(line, lineNum)
-        tokens = append(tokens, lineTokens)
 
+        if len(lineTokens) == 0 {
+            lineNum += 1
+            continue
+        }
+        
+        tokens = append(tokens, lineTokens)
         lineNum += 1
     }
 
