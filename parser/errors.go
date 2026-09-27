@@ -1,6 +1,6 @@
 package parser
 
 type Error struct {
-    Message string
-    Line int
+	Message string
+	Line    int
 }

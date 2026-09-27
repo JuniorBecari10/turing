@@ -3,38 +3,38 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"turing/cli"
 	"turing/parser"
 	"turing/run"
 )
 
 func main() {
-    tokens, err := parser.Lex(os.Stdin)
-    if err != nil {
-    	fmt.Fprintln(os.Stderr, err.Error())
-    	os.Exit(1)
-    }
+	args := cli.ParseFlags()
+	os.Exit(perform(args))
+}
 
-    program, errs := parser.Parse(tokens)
-    if len(errs) > 0 {
-	    for _, e := range errs {
-	    	fmt.Printf("Error in line %d: %s\n", e.Line + 1, e.Message)
-	    }
-	    os.Exit(1)
-    }
+func perform(args cli.CliArgs) int {
+	reader, err := getReader(args.File)
+	if err != nil {
+		return fail(err)
+	}
 
-	var tape [run.TAPE_LENGTH]rune
-	parser.FillSlice(tape[:], ' ')
+	tokens, err := parser.Lex(reader)
+	if err != nil {
+		return fail(err)
+	}
 
-	tape[0] = 'a'
-	tape[1] = 'a'
-	tape[2] = 'a'
-	tape[3] = 'a'
-	tape[4] = '-'
-	tape[5] = 'a'
-	tape[6] = 'a'
-	tape[7] = 'a'
-	tape[8] = '='
+	program, errs := parser.Parse(tokens)
+	if len(errs) > 0 {
+		for _, e := range errs {
+			fmt.Printf("Error in line %d: %s\n", e.Line+1, e.Message)
+		}
+		return 1
+	}
 
-	runner := run.New(program, &tape, nil, nil)
+	runner := run.New(program, buildInitialTape(args.Tape), args.Head, args.State, args.FullSpeed)
 	runner.Run()
+
+	return 0
 }

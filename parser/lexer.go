@@ -7,55 +7,55 @@ import (
 )
 
 func Lex(reader io.Reader) ([][]Token, error) {
-    tokens := [][]Token{}
-  
-    scanner := bufio.NewScanner(reader)
-    lineNum := 0
-    
-    for scanner.Scan() {
-        line := strings.TrimSpace(scanner.Text())
+	tokens := [][]Token{}
 
-        if err := scanner.Err(); err != nil {
-            return nil, err
-        }
+	scanner := bufio.NewScanner(reader)
+	lineNum := 0
 
-        if line == "" {
-            // empty / only whitespace
-            lineNum += 1
-            continue
-        }
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
 
-        // remove comments; len will never be 0.
-        line = strings.SplitN(line, ";", 2)[0]
-        lineTokens := lexLine(line, lineNum)
+		if err := scanner.Err(); err != nil {
+			return nil, err
+		}
 
-        if len(lineTokens) == 0 {
-            lineNum += 1
-            continue
-        }
-        
-        tokens = append(tokens, lineTokens)
-        lineNum += 1
-    }
+		if line == "" {
+			// empty / only whitespace
+			lineNum += 1
+			continue
+		}
 
-    return tokens, nil
+		// remove comments; len will never be 0.
+		line = strings.SplitN(line, ";", 2)[0]
+		lineTokens := lexLine(line, lineNum)
+
+		if len(lineTokens) == 0 {
+			lineNum += 1
+			continue
+		}
+
+		tokens = append(tokens, lineTokens)
+		lineNum += 1
+	}
+
+	return tokens, nil
 }
 
 func lexLine(line string, lineNum int) []Token {
-    split := strings.Split(line, " ")
-    tokens := []Token{}
+	split := strings.Split(line, " ")
+	tokens := []Token{}
 
-    for _, lexeme := range split {
-        lexeme = strings.TrimSpace(lexeme)
-        if lexeme == "" {
-            continue
-        }
-        
-        tokens = append(tokens, Token{
-        	Lexeme: lexeme,
-        	Line: lineNum,
-        })
-    }
-    
-    return tokens
+	for _, lexeme := range split {
+		lexeme = strings.TrimSpace(lexeme)
+		if lexeme == "" {
+			continue
+		}
+
+		tokens = append(tokens, Token{
+			Lexeme: lexeme,
+			Line:   lineNum,
+		})
+	}
+
+	return tokens
 }

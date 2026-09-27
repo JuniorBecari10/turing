@@ -6,7 +6,7 @@ import (
 	"unicode/utf8"
 )
 
-func GetSymbol(s string, lineNum int) (rune, *Error) {
+func getSymbol(s string, lineNum int) (rune, *Error) {
 	newErr := func(msg string) *Error { return &Error{msg, lineNum} }
 
 	if s == "" {
@@ -21,23 +21,19 @@ func GetSymbol(s string, lineNum int) (rune, *Error) {
 	return r, nil
 }
 
-func GetDirection(s string, lineNum int) (Direction, *Error) {
+func getDirection(s string, lineNum int) (Direction, *Error) {
 	newErr := func(msg string) *Error { return &Error{msg, lineNum} }
 	s = strings.ToLower(s)
 
 	switch s {
-    	case "l": return DIR_LEFT, nil
-    	case "r": return DIR_RIGHT, nil
-    	case "*": return DIR_NOT_MOVE, nil
+	case "l":
+		return DIR_LEFT, nil
+	case "r":
+		return DIR_RIGHT, nil
+	case "*":
+		return DIR_NOT_MOVE, nil
 
-    	default: return 0, newErr(fmt.Sprintf("Invalid direction: '%s'.", s))
+	default:
+		return 0, newErr(fmt.Sprintf("Invalid direction: '%s'.", s))
 	}
-}
-
-func FillSlice(slice []rune, value rune) {
-    slice[0] = value
-
-    for j := 1; j < len(slice); j *= 2 {
-        copy(slice[j:], slice[:j])
-    }
 }
