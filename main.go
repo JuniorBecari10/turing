@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"turing/parser"
+	"turing/run"
 )
 
 func main() {
@@ -21,5 +22,19 @@ func main() {
 	    os.Exit(1)
     }
 
-    fmt.Println(program)
+	var tape [run.TAPE_LENGTH]rune
+	parser.FillSlice(tape[:], ' ')
+
+	tape[0] = 'a'
+	tape[1] = 'a'
+	tape[2] = 'a'
+	tape[3] = 'a'
+	tape[4] = '-'
+	tape[5] = 'a'
+	tape[6] = 'a'
+	tape[7] = 'a'
+	tape[8] = '='
+
+	runner := run.New(program, &tape, nil, nil)
+	runner.Run()
 }

@@ -27,7 +27,6 @@ func Lex(reader io.Reader) ([][]Token, error) {
 
         // remove comments; len will never be 0.
         line = strings.SplitN(line, ";", 2)[0]
-
         lineTokens := lexLine(line, lineNum)
 
         if len(lineTokens) == 0 {
@@ -47,6 +46,7 @@ func lexLine(line string, lineNum int) []Token {
     tokens := []Token{}
 
     for _, lexeme := range split {
+        lexeme = strings.TrimSpace(lexeme)
         if lexeme == "" {
             continue
         }

@@ -18,7 +18,7 @@ func Parse(tokens [][]Token) (Program, []Error) {
 
         if _, ok := program[check]; ok {
             errors = append(errors, Error{
-            	Message: fmt.Sprintf("There is already a rule with state '%s' and symbol '%c'.", check.State, check.Symbol),
+            	Message: fmt.Sprintf("There is already a rule for state '%s' and symbol '%c'.", check.State, check.Symbol),
             	Line: i,
             })
             continue
@@ -30,8 +30,7 @@ func Parse(tokens [][]Token) (Program, []Error) {
     return program, errors
 }
 
-// TODO: test whitespace as symbols (lexemes)
-func parseLine(line []Token, lineNum int) (Check, Operation, *Error) {
+	func parseLine(line []Token, lineNum int) (Check, Operation, *Error) {
     if len(line) != 5 {
         return Check{}, Operation{}, &Error{
         	Message: fmt.Sprintf("Invalid number of entries per line. Expected 5, got %d.", len(line)),
