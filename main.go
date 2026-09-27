@@ -1,10 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"turing/parser"
 )
 
 func main() {
-    parser.Lex(os.Stdin)
+    tokens, err := parser.Lex(os.Stdin)
+    if err != nil {
+    	panic(err)
+    }
+
+    fmt.Println(tokens)
 }

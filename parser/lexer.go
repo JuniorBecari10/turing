@@ -2,46 +2,51 @@ package parser
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"strings"
 )
 
-func Lex(reader io.Reader) ([]Token, []Error, error) {
+func Lex(reader io.Reader) ([]Token, error) {
     tokens := []Token{}
-    errors := []Error{}
-    
+  
     scanner := bufio.NewScanner(reader)
+    lineNum := 0
     
     for scanner.Scan() {
         line := strings.TrimSpace(scanner.Text())
 
         if err := scanner.Err(); err != nil {
-            return nil, nil, err
+            return nil, err
         }
 
         if line == "" {
             // empty / only whitespace
+            lineNum += 1
             continue
         }
 
-        token, err := lexLine(line)
+        // remove comments; len will never be 0.
+        line = strings.SplitN(line, ";", 2)[0]
 
-        if err != nil {
-            errors = append(errors, *err)
-            continue
-        }
-       
-        tokens = append(tokens, token)
+        lineTokens := lexLine(line, lineNum)
+        tokens = append(tokens, lineTokens...)
+
+        lineNum += 1
     }
 
-    return tokens, errors, nil
+    return tokens, nil
 }
 
-func lexLine(line string) (Token, *Error) {
-    // remove comments; len will never be 0.
-    line = strings.SplitN(line, ";", 2)[0]
+func lexLine(line string, lineNum int) []Token {
     split := strings.Split(line, " ")
-    fmt.Println(line, split)
-    return Token{}, nil
+
+    tokens := []Token{}
+    for _, lexeme := range split {
+        tokens = append(tokens, Token{
+        	Lexeme: lexeme,
+        	Line: lineNum,
+        })
+    }
+    
+    return tokens
 }
