@@ -16,7 +16,7 @@ TODO:
 The second should shadow the first
 */
 
-const TAPE_LENGTH int = 2048
+const TAPE_LENGTH int = 2000
 const TAPE_VIEW int = 80
 
 type Runner struct {
@@ -122,26 +122,26 @@ func (r *Runner) doOperation(op parser.Operation) {
 
 func (r *Runner) draw() {
 	if r.drawn {
-		lines := 3 // tape line, blank line, state line
-		if r.head < TAPE_VIEW {
-			lines++ // pointer line only appears when head < TAPE_VIEW
-		}
-
-		fmt.Printf("\033[%dA\033[J", lines)
+		fmt.Printf("\033[%dA\033[J", 4) // tape line, pointer line, blank line, state line — always shown now
 	}
-
 	r.drawn = true
 
-	for i := range TAPE_VIEW {
-		fmt.Printf("%c", r.tape[i])
+	// Find which TAPE_VIEW-sized window the head currently falls in.
+	offset := (r.head / TAPE_VIEW) * TAPE_VIEW
+
+	prefix := fmt.Sprintf("%4d | ", offset)
+	fmt.Printf("\033[2m%s\033[0m", prefix)
+
+	for i := 0; i < TAPE_VIEW; i++ {
+		idx := (offset + i) % TAPE_LENGTH
+		fmt.Printf("%c", r.tape[idx])
 	}
 
 	fmt.Println()
 
-	if r.head < TAPE_VIEW {
-		fmt.Print(strings.Repeat(" ", r.head))
-		fmt.Println("^")
-	}
+	pointerPos := r.head - offset
+	fmt.Print(strings.Repeat(" ", len(prefix)+pointerPos))
+	fmt.Println("^")
 
 	fmt.Printf("\nState: %s\n", r.state)
 }

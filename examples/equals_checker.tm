@@ -1,0 +1,11 @@
+0 a x r 1
+0 y y r 0
+0 _ _ r haltaccept
+0 b b r haltreject
+1 a a r 1
+1 y y r 1
+1 b y l 2
+1 _ _ r haltreject
+2 a a l 2
+2 y y l 2
+2 x x r 0
