@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-func Lex(reader io.Reader) ([]Token, error) {
-    tokens := []Token{}
+func Lex(reader io.Reader) ([][]Token, error) {
+    tokens := [][]Token{}
   
     scanner := bufio.NewScanner(reader)
     lineNum := 0
@@ -29,7 +29,7 @@ func Lex(reader io.Reader) ([]Token, error) {
         line = strings.SplitN(line, ";", 2)[0]
 
         lineTokens := lexLine(line, lineNum)
-        tokens = append(tokens, lineTokens...)
+        tokens = append(tokens, lineTokens)
 
         lineNum += 1
     }
@@ -39,9 +39,13 @@ func Lex(reader io.Reader) ([]Token, error) {
 
 func lexLine(line string, lineNum int) []Token {
     split := strings.Split(line, " ")
-
     tokens := []Token{}
+
     for _, lexeme := range split {
+        if lexeme == "" {
+            continue
+        }
+        
         tokens = append(tokens, Token{
         	Lexeme: lexeme,
         	Line: lineNum,

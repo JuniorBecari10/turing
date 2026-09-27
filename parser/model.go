@@ -9,7 +9,7 @@ const (
 )
 
 type Program = map[Check]Operation
-type Symbol = uint32 // any UTF-32 character
+type Symbol = rune
 
 type Check struct {
     State string

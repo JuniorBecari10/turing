@@ -13,4 +13,11 @@ func main() {
     }
 
     fmt.Println(tokens)
+
+    program, errs := parser.Parse(tokens)
+    for _, e := range errs {
+    	fmt.Println(e)
+    }
+
+    fmt.Println(program)
 }
