@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 	"turing/run"
 )
 
@@ -19,6 +20,8 @@ func buildInitialTape(tape string) *[run.TAPE_LENGTH]rune {
 	if tape == "" {
 		return nil
 	}
+
+	tape = strings.ReplaceAll(tape, "_", " ")
 
 	initialTape := &[run.TAPE_LENGTH]rune{}
 	run.FillSlice(initialTape[:], ' ')

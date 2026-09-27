@@ -1,0 +1,11 @@
+0 a x r 1
+0 y a r 4
+1 a a r 1
+1 y y r 1
+1 _ y r 2
+2 _ y l 3
+3 a a l 3
+3 y y l 3
+3 x a r 0
+4 y a r 4
+4 _ _ r halt

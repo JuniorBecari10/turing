@@ -28,8 +28,9 @@ func perform(args cli.CliArgs) int {
 	program, errs := parser.Parse(tokens)
 	if len(errs) > 0 {
 		for _, e := range errs {
-			fmt.Printf("Error in line %d: %s\n", e.Line+1, e.Message)
+			fmt.Printf("Error in line %d: %s\n", e.Line + 1, e.Message)
 		}
+
 		return 1
 	}
 
